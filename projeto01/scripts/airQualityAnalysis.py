@@ -22,7 +22,7 @@ lizados pela plataforma do Instituto Energia e Meio Ambiente.
 
 
 
-@author: Leonardo.Hoinaski
+@author: Gustavo Starling
 """
 
 # Importação dos pacotes
@@ -30,14 +30,18 @@ import pandas as pd
 import numpy as np
 import os
 
+from pathlib import Path
+
 
 def airQualityAnalysis(uf):
     # -------------------------- Abrir os dados -----------------------------------
     # Criando variável com o nome do estado
-    #uf = 'SP'
+    uf = 'RJ'
     
     # Definindo o caminho para a pasta de dados
-    dataDir = r"C:\Users\Leonardo.Hoinaski\Documents\ENS5132\projeto01\inputs" +'/'+ uf
+    dataDir = Path(r"C:\Users\Usuario\Documents\github\ENS5132\projeto01\inputs" +'/' +uf ,exist_ok=True)
+    
+    os.makedirs(dataDir, exist_ok=True)  # Ensure the folder exists
     
     # Lista de arquivos dentro da pasta
     dataList = os.listdir(dataDir)
@@ -56,9 +60,9 @@ def airQualityAnalysis(uf):
     aqData = pd.concat(allFiles)
     
     # Caminho para um dos arquivos
-    #aqPath = r"C:\Users\Leonardo.Hoinaski\Documents\ENS5132\projeto01\inputs\SP\SP201501.csv"
+    #aqPath = r"C:\Users\Usuario\Documents\github\ENS5132\projeto01\inputs\RJ\RJ202101.csv"
     
-    # Abrir dados de apenas uma das estações de monitoramento de SP
+    # Abrir dados de apenas uma das estações de monitoramento do RJ
     #aqData = pd.read_csv(aqPath, encoding='latin1')
     
     
@@ -122,7 +126,7 @@ def airQualityAnalysis(uf):
     stations = np.unique(aqData.Estacao)
     
     # criando pasta para salvar os dado
-    os.makedirs(r'C:\Users\Leonardo.Hoinaski\Documents\ENS5132\projeto01\outputs'
+    os.makedirs(r"C:\Users\Usuario\Documents\github\ENS5132\projeto01\outputs"
                      +'/'+uf,exist_ok=True)
     
     # # Loop para cada poluente e extraindo as estatísticas básicas
@@ -141,7 +145,7 @@ def airQualityAnalysis(uf):
     #     dfmerge = pd.concat(statAll,axis=1)
         
     #     # Salva as estatísticas por estação    
-    #     dfmerge.to_csv(r'C:\Users\Leonardo.Hoinaski\Documents\ENS5132\projeto01\outputs'
+    #     dfmerge.to_csv(r"C:\Users\Usuario\Documents\github\ENS5132\projeto01\outputs"
     #                          +'/'+uf+'/basicStat_'+st+'.csv')
     
     
@@ -149,7 +153,7 @@ def airQualityAnalysis(uf):
     statGroup = aqData.groupby(['Estacao','Poluente']).describe()
     
     # Salvando em csv
-    statGroup.to_csv(r'C:\Users\Leonardo.Hoinaski\Documents\ENS5132\projeto01\outputs'
+    statGroup.to_csv(r"C:\Users\Usuario\Documents\github\ENS5132\projeto01\outputs"
                          +'/'+uf+'/basicStat_ALL.csv')
     
     aqData = aqData.set_index(pd.DatetimeIndex(aqData['datetime']))

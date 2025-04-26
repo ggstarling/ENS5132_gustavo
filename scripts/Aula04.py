@@ -5,7 +5,7 @@ Created on Tue Apr  1 13:42:20 2025
 Este script utilizei durante a aula 04 no dia 01/04/2025. 
 
 
-@author: Leonardo.Hoinaski
+@author: Gustavo Starling
 """
 
 #%% Importando os pacotes que utilizarei
@@ -13,6 +13,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+
+from pathlib import Path
+
+
 
 #%% Revisão numpy
 
@@ -114,14 +118,23 @@ df = pd.DataFrame(columns=['date','NH3'],
 df['NO3'] = np.nan 
 df['O2'] = [2 , 10]
 df['SO4'] = np.nan 
-df['SO4'][0] = 10
+df.loc[0, 'SO4'] = 10
+
+print(df)
 
 #%% Trabalhando com dado real
 # Criando variável com o nome do estado
-uf = 'SP'
 
-# Definindo o caminho para a pasta de dados
-dataDir = r"C:\Users\Leonardo.Hoinaski\Documents\ENS5132\data\MQAR" +'/'+ uf
+from pathlib import Path
+
+uf = 'RJ'
+dataDir = Path(r"C:\Users\Usuario\Documents\github\ENS5132_gustavo\data\MQAR") / uf
+
+if not dataDir.exists():
+    print(f"Pasta {dataDir} não existe. Criando agora...")
+    dataDir.mkdir(parents=True, exist_ok=True)
+else:
+    print(f"Pasta {dataDir} já existe.")
 
 # Lista de arquivos dentro da pasta
 dataList = os.listdir(dataDir)
@@ -145,11 +158,15 @@ stations = pd.unique(allFiles['Estacao'])
 # usando lógica...
 stationDf = allFiles[allFiles['Estacao'] == stations[0]]
 
+
 # Criando coluna datetime
 datetimeDf = pd.to_datetime(stationDf.Data, format='%Y-%m-%d')
 
 # Criando coluna datetime dentro de stationDf
 stationDf['datetime'] = datetimeDf
+
+# Removendo a coluna 'Data' para evitar a repetição
+stationDf.drop(columns=['Data'], inplace=True)
 
 # Transformando a coluna de datetime em index
 stationDf = stationDf.set_index(stationDf['datetime'])
@@ -174,4 +191,4 @@ stationDf['hour'] = horaDf
 stationDf['datetime'] = pd.to_datetime(
     stationDf[['year', 'month','day','hour']],format='%Y%m%d %H')
 
-
+print(stationDf.head())

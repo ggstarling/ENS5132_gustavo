@@ -2,7 +2,7 @@
 """
 Created on Tue Apr  8 15:32:16 2025
 
-@author: Leonardo.Hoinaski
+@author: Gustavo Starling
 """
 
 from airQualityAnalysis import airQualityAnalysis
